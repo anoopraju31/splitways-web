@@ -8,15 +8,15 @@ approximation.
 
 ## 01 Agent-Native Infrastructure
 
-- [ ] Provision Clerk app + keys with the Clerk CLI (`clerk init --framework
+- [x] Provision Clerk app + keys with the Clerk CLI (`clerk init --framework
 next`; `clerk env pull` for refreshes; verify with `clerk doctor`)
-- [ ] `proxy.ts` with `clerkMiddleware()` protecting `/dashboard` and
+- [x] `proxy.ts` with `clerkMiddleware()` protecting `/dashboard` and
       `/groups/*`; `/`, auth pages, and webhooks stay public
-- [ ] Root layout wrapped in `<ClerkProvider>`; header with logo, Dashboard
+- [x] Root layout wrapped in `<ClerkProvider>`; header with logo, Dashboard
       link + `<UserButton />` (signed in), Sign in / Get started modals
       (signed out)
-- [ ] `/sign-in` and `/sign-up` catch-all routes
-- [ ] Keyless mode works before real keys exist
+- [x] `/sign-in` and `/sign-up` catch-all routes
+- [x] Keyless mode works before real keys exist
 
 ## 02 UI Foundation (mock data)
 

@@ -85,7 +85,7 @@ accepted at entry and any currency can be chosen for display.
   helper text is limited to actionable validation ("Percentages add up to
   87%"). Design rationale lives in these docs, not in product copy.
 - **Rates lock at entry:** a saved expense's USD value never drifts with
-  FX moves; only the *display* conversion uses today's rate
+  FX moves; only the _display_ conversion uses today's rate
 - **Names, never ids:** raw Clerk userIds must never appear in the UI
   (Base UI selects need an `items` map to render labels)
 - **New-item feedback:** a freshly added expense is visibly marked in the

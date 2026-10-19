@@ -15,7 +15,7 @@ Flag violations with the item number. Project context: Next.js 16 App Router,
 ## Server vs Client Components
 
 1. **Never mark a root page/layout `"use client"`.** It drags the whole tree
-   to the client. Only interactive *leaf* components get `"use client"`
+   to the client. Only interactive _leaf_ components get `"use client"`
    (forms, dialogs, buttons with handlers).
 2. **No `window`/`document`/event handlers in server components.** Extract
    browser-dependent code into a dedicated client component.
@@ -66,7 +66,7 @@ Flag violations with the item number. Project context: Next.js 16 App Router,
     components to client just to hold a spinner in useState.
 18. **Pair it with `error.tsx`** at the same segment level for a graceful
     fallback.
-19. **Suspense goes around the component that *consumes* async data**, one
+19. **Suspense goes around the component that _consumes_ async data**, one
     level below the fetch — wrapping the awaited call itself won't stream.
 20. **Fetch shared data in `layout.tsx`** (nav, current user) once, not in
     every page below it.

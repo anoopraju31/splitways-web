@@ -14,7 +14,7 @@ The page must feel like the product: instant, friendly, zero ceremony.
 ## Hard rules
 
 1. **Theme tokens only.** Colors come from the CSS variables in
-   `app/globals.css` (currently tweakcn *northern-lights*: aurora-green
+   `app/globals.css` (currently tweakcn _northern-lights_: aurora-green
    `primary`, blue `secondary`, cyan `accent`). Never hardcode hex values.
    Emerald = money owed to you, rose = money you owe — reserve them for
    money, don't decorate with them.
@@ -33,7 +33,7 @@ The page must feel like the product: instant, friendly, zero ceremony.
 ## Layout blueprint (top to bottom)
 
 1. **Hero** — headline with one `text-primary` accent phrase, subhead, single
-   primary CTA. Below it, a *product proof*: a mocked "who owes whom" card
+   primary CTA. Below it, a _product proof_: a mocked "who owes whom" card
    showing 5 messy debts collapsing to 2 payments — the algorithm IS the
    pitch. Render it with real UI components (Card, Badge, avatars), not a
    screenshot.
@@ -53,7 +53,7 @@ The page must feel like the product: instant, friendly, zero ceremony.
   loaded); `text-muted-foreground` for all supporting text.
 - Motion: playful but cheap — `tw-animate-css` entrance fades/slides,
   hover micro-interactions (lift, tilt-to-straighten), and slow ambient
-  float on *decorative* accents only (e.g. background currency glyphs).
+  float on _decorative_ accents only (e.g. background currency glyphs).
   Nothing parallax, nothing that competes with the CTA, no client JS for
   decoration.
 - Personality: currency glyphs (¥ € ₹ $) as decoration are welcome — they're
