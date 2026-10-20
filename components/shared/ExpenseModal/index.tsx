@@ -43,13 +43,33 @@ export function ExpenseModal({ isOpen, onClose, members, currentUser, expense, o
   };
 
   const handleSave = () => {
+    const totalCents = Math.round(parseFloat(amount || '0') * 100);
+    if (!description.trim() || totalCents <= 0 || selectedMembers.length === 0) {
+      return;
+    }
+
+    // Exact equal split with remainder reconciliation
+    const count = selectedMembers.length;
+    const share = Math.floor(totalCents / count);
+    let remainder = totalCents - share * count;
+
+    const splits = selectedMembers.map((userId) => {
+      const splitAmount = share + (remainder > 0 ? 1 : 0);
+      if (remainder > 0) remainder--;
+      return {
+        userId,
+        amountCents: splitAmount,
+      };
+    });
+
     onSave?.({
-      description,
-      amountCents: Math.round(parseFloat(amount || '0') * 100),
+      description: description.trim(),
+      amountCents: totalCents,
       currency,
       paidById,
       splitMode,
       selectedMembers,
+      splits,
     });
     onClose();
   };

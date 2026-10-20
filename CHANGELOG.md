@@ -2,6 +2,18 @@
 
 All notable changes to Splitwise are recorded here.
 
+## [0.4.0] - 2026-10-20
+
+### Added
+
+- Connected Prisma SQLite database with core schema (`User`, `Group`, `GroupMember`, `Expense`, `ExpenseSplit`, `Settlement`).
+- Added `lib/ensure-user.ts` to automatically sync authenticated Clerk users to the local database.
+- Implemented `lib/queries.ts` for database reads (groups, balances, memberships) with no database queries in UI components.
+- Implemented `lib/simplify-debts.ts` for net balance computation and greedy debt-minimization algorithm (settling in $\le n-1$ payments).
+- Implemented Server Actions in `app/actions/groups.ts` (`createGroup`, `addMember`) and `app/actions/expenses.ts` (`addExpense`, `updateExpense`, `deleteExpense`, `settleUp`, `deleteSettlement`).
+- Connected Dashboard and Group Detail pages to live database queries with `sonner` toast feedback and `useTransition` loading states.
+- Deleted `lib/mock-data.ts`.
+
 ## [0.3.0] - 2026-10-19
 
 ### Added

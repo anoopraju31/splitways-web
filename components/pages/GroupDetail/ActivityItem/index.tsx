@@ -1,7 +1,7 @@
 import { Pencil, Trash2, HandCoins } from 'lucide-react';
 
 import type { Expense, Settlement, User } from '@/lib/types';
-import { formatCents } from '@/lib/mock-data';
+import { formatCents } from '@/lib/format';
 
 interface ActivityItemProps {
   item: { type: 'expense'; data: Expense } | { type: 'settlement'; data: Settlement };

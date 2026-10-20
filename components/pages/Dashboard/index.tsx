@@ -1,44 +1,54 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
-import type { GroupWithDetails } from '@/lib/types';
-import { mockCurrentUser, mockGroups, formatCents } from '@/lib/mock-data';
+import type { GroupWithDetails, User } from '@/lib/types';
+import { formatCents } from '@/lib/format';
 import { CurrencySelect } from '@/components/shared/CurrencySelect';
 import { GroupCard } from '@/components/pages/Dashboard/GroupCard';
+import { createGroup } from '@/app/actions/groups';
 
-export function DashboardPage() {
-  const [groups, setGroups] = useState<GroupWithDetails[]>(mockGroups);
+interface DashboardPageProps {
+  currentUser: User;
+  initialGroups: GroupWithDetails[];
+}
+
+export function DashboardPage({ currentUser, initialGroups }: DashboardPageProps) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const [newGroupName, setNewGroupName] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
 
   // Compute aggregate totals across all groups
-  const totalOwed = groups.reduce((acc, g) => (g.userBalanceCents > 0 ? acc + g.userBalanceCents : acc), 0);
-  const totalOwe = groups.reduce((acc, g) => (g.userBalanceCents < 0 ? acc + Math.abs(g.userBalanceCents) : acc), 0);
+  const totalOwed = initialGroups.reduce((acc, g) => (g.userBalanceCents > 0 ? acc + g.userBalanceCents : acc), 0);
+  const totalOwe = initialGroups.reduce(
+    (acc, g) => (g.userBalanceCents < 0 ? acc + Math.abs(g.userBalanceCents) : acc),
+    0,
+  );
 
   const handleCreateGroup = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newGroupName.trim()) return;
+    const trimmed = newGroupName.trim();
+    if (!trimmed) {
+      toast.error('Please enter a group name');
+      return;
+    }
 
-    const newGroup: GroupWithDetails = {
-      id: newGroupName.toLowerCase().replace(/\s+/g, '-'),
-      name: newGroupName.trim(),
-      totalCents: 0,
-      userBalanceCents: 0,
-      members: [
-        {
-          groupId: newGroupName.toLowerCase().replace(/\s+/g, '-'),
-          userId: mockCurrentUser.id,
-          role: 'admin',
-          user: mockCurrentUser,
-        },
-      ],
-      expenses: [],
-      settlements: [],
-    };
+    startTransition(async () => {
+      const res = await createGroup(trimmed);
+      if (res?.error) {
+        toast.error(res.error);
+        return;
+      }
 
-    setGroups((prev) => [newGroup, ...prev]);
-    setNewGroupName('');
+      toast.success('Group created!');
+      setNewGroupName('');
+      if (res?.groupId) {
+        router.push(`/groups/${res.groupId}`);
+      }
+    });
   };
 
   return (
@@ -47,7 +57,7 @@ export function DashboardPage() {
         {/* Top welcome row */}
         <div className="flex items-center justify-between pb-8">
           <h1 className="text-foreground text-3xl font-extrabold tracking-tight">
-            Welcome back, {mockCurrentUser.name} 👋
+            Welcome back, {currentUser.name} 👋
           </h1>
           <CurrencySelect value={selectedCurrency} onChange={setSelectedCurrency} />
         </div>
@@ -81,23 +91,31 @@ export function DashboardPage() {
                 value={newGroupName}
                 onChange={(e) => setNewGroupName(e.target.value)}
                 placeholder="New group name..."
-                className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary w-48 rounded-xl border px-3.5 py-2 text-sm focus:ring-1 focus:outline-none sm:w-64"
+                disabled={isPending}
+                className="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary w-48 rounded-xl border px-3.5 py-2 text-sm focus:ring-1 focus:outline-none disabled:opacity-50 sm:w-64"
               />
               <button
                 type="submit"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition-colors"
+                disabled={isPending}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition-colors disabled:opacity-50"
               >
-                Create group
+                {isPending ? 'Creating...' : 'Create group'}
               </button>
             </form>
           </div>
 
           {/* Group cards grid */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {groups.map((group) => (
-              <GroupCard key={group.id} group={group} />
-            ))}
-          </div>
+          {initialGroups.length === 0 ? (
+            <div className="border-border bg-card text-muted-foreground rounded-2xl border p-8 text-center text-sm">
+              You don&apos;t have any groups yet. Create one above to start splitting expenses!
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {initialGroups.map((group) => (
+                <GroupCard key={group.id} group={group} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </main>

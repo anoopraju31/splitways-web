@@ -1,5 +1,5 @@
 import type { SimplifiedDebt, User } from '@/lib/types';
-import { formatCents } from '@/lib/mock-data';
+import { formatCents } from '@/lib/format';
 
 interface WhoOwesWhomProps {
   debts: SimplifiedDebt[];

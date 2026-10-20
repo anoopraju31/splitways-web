@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import type { GroupWithDetails } from '@/lib/types';
-import { formatCents } from '@/lib/mock-data';
+import { formatCents } from '@/lib/format';
 import { Avatar } from '@/components/shared/Avatar';
 
 interface GroupCardProps {
